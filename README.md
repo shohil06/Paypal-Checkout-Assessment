@@ -17,11 +17,11 @@ Credentials:
 	1.1 Email : sb-tkuio1694164@business.example.com
 	1.2 Password : 97D0l@N(
 
-NOTE: All credentials are also present in https://github.com/shohil06/paypal_Checkout_Assessment/blob/master/paypalCredentials.json
+NOTE: All credentials are also present in https://github.com/shohil06/Paypal-Checkout-Assessment/blob/master/paypalCredentials.json
 </p>
 
 
 <br/><br/>
 <b>Sequence Diagram</b>:
 <br/><br/><br/>
-![alt text](https://github.com/shohil06/paypal_Checkout_Assessment/blob/master/Sequence%20Diagram.png)
+![alt text](https://github.com/shohil06/Paypal-Checkout-Assessment/blob/master/Sequence%20Diagram.png)

@@ -106,6 +106,7 @@ paypal.Buttons({
             });
     },
     onApprove: function (data, actions) {
+        swal({ title: "Transaction In Progress", text: "Order Id : " + data.orderID, type: "info", button: false });
         return fetch('/captureOrder', {
             method: 'post',
             headers: {
@@ -115,6 +116,7 @@ paypal.Buttons({
                 orderID: data.orderID
             })
         }).then(function (res) {
+            swal.close();
             return res.json();
         }).then(function (data) {
             swal("Transaction Successfull", "Order Id : " + data.id, "success");
