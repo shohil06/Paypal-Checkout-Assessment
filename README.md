@@ -1,5 +1,5 @@
-# paypal_assessment_trial_5
-
+# Paypal Checkout Assessment
+<p>
 Following are the steps to test the application -
 
 1. Open the URL https://checkoutassessment.azurewebsites.net/
@@ -18,3 +18,10 @@ Credentials:
 	1.2 Password : 97D0l@N(
 
 NOTE: All credentials are also present in https://github.com/shohil06/paypal_Checkout_Assessment/blob/master/paypalCredentials.json
+</p>
+
+
+<br/><br/>
+<b>Sequence Diagram</b>:
+<br/><br/><br/>
+![alt text](https://github.com/shohil06/paypal_Checkout_Assessment/blob/master/Sequence%20Diagram.png)
