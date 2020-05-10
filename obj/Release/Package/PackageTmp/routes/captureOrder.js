@@ -18,7 +18,11 @@ router.post("/", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const orderID = req.body.orderID;
         try {
-            yield captureOrderApi_From_SDK(orderID, res);
+            // True to use SDK
+            // False for using REST API
+            var use_SDK = paypalCredentials.use_SDK;
+            use_SDK === true ? yield captureOrderApi_From_SDK(orderID, res) : captureOrderApi_From_Orders_Capture_Api(orderID, res);
+            //await captureOrderApi_From_SDK(orderID, res);
             //captureOrderApi_From_Orders_Capture_Api(orderID, res)
         }
         catch (err) {
@@ -27,6 +31,11 @@ router.post("/", function (req, res) {
         }
     });
 });
+/*  Captures Order using Paypal SDK
+*	@param orderId
+*	@param responseClient - response
+*	@return JSON
+*/
 function captureOrderApi_From_SDK(orderId, responseClient) {
     return __awaiter(this, void 0, void 0, function* () {
         const request = new paypal.orders.OrdersCaptureRequest(orderId);
@@ -51,6 +60,11 @@ function captureOrderApi_From_SDK(orderId, responseClient) {
         }
     });
 }
+/*  Captures Order using REST
+*	@param orderId
+*	@param response - response
+*	@return JSON
+*/
 function captureOrderApi_From_Orders_Capture_Api(orderId, response) {
     return __awaiter(this, void 0, void 0, function* () {
         var http = require("https");

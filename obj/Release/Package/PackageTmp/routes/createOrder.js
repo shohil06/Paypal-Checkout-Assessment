@@ -18,7 +18,11 @@ router.post("/", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const transactionAmount = req.body.amount;
-            yield createOrderApi_From_SDK(transactionAmount, res);
+            // True to use SDK
+            // False for using REST API
+            var use_SDK = paypalCredentials.use_SDK;
+            use_SDK === true ? createOrderApi_From_SDK(transactionAmount, res) : createOrderApi_from_Orders_Create_API(transactionAmount, res);
+            //await createOrderApi_From_SDK(transactionAmount, res);
             //createOrderApi_from_Orders_Create_API(transactionAmount, res)
         }
         catch (err) {
@@ -27,6 +31,12 @@ router.post("/", function (req, res) {
         }
     });
 });
+/*  Create Order using Paypal SDK
+*   Creates a new order
+*	@param Amount - acceps the amount
+*	@param responseClient - response
+*	@return JSON
+*/
 function createOrderApi_From_SDK(transacAmount, responseClient) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -57,6 +67,12 @@ function createOrderApi_From_SDK(transacAmount, responseClient) {
         }
     });
 }
+/*  Create Order via REST
+*   Creates a new order
+*	@param Amount - acceps the amount
+*	@param response - response
+*	@return JSON
+*/
 function createOrderApi_from_Orders_Create_API(transacAmount, response) {
     return __awaiter(this, void 0, void 0, function* () {
         var http = require("https");

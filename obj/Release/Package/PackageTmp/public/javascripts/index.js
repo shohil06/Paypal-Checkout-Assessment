@@ -82,23 +82,11 @@ $('document').ready(function () {
             parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
 });
 
-var FUNDING_SOURCES = [
-    paypal.FUNDING.PAYPAL,
-    paypal.FUNDING.VENMO,
-    paypal.FUNDING.CREDIT,
-    paypal.FUNDING.CARD
-];
-
-FUNDING_SOURCES.forEach(function (fundingSource) {
-    var button = paypal.Buttons({
-        fundingSource: fundingSource
-    });
-    if (button.isEligible()) {
-        button.render('#paypal-button-container');
-    }
-});
 paypal.Buttons({
     createOrder: function (data, actions) {
+        var transactionAmount = parseFloat(parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
+            parseInt($("#retriever_Quantity").val()) * parseFloat($("#retrieverAmount")[0].innerText.split("$")[1]) +
+            parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
         return fetch('/createOrder', {
             method: 'post',
             headers: {
@@ -106,15 +94,16 @@ paypal.Buttons({
             },
             body: JSON.stringify({
                 "intent": "CAPTURE",
-                "amount": parseFloat(parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
-                    parseInt($("#retriever_Quantity").val()) * parseFloat($("#retrieverAmount")[0].innerText.split("$")[1]) +
-                    parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2).toString()
+                "amount": transactionAmount.toString()
             })
         }).then(function (res) {
             return res.json();
         }).then(function (data) {
             return data.orderID;
-        });
+        }).catch(function (error) {
+                swal(exception.message, "error");
+                console.error(exception);
+            });
     },
     onApprove: function (data, actions) {
         return fetch('/captureOrder', {
@@ -128,8 +117,14 @@ paypal.Buttons({
         }).then(function (res) {
             return res.json();
         }).then(function (data) {
-            return alert('Transaction triggered by ' + data.payer.name.given_name + " with status : " + data.status.toString());
+            swal("Transaction Successfull", "Order Id : " + data.id, "success");
         });
+    },
+    onCancel: function (data) {
+        swal("Transaction Cancelled",'Order Id : ' + data.orderID, "info");
+    },
+    onError: function (err) {
+        swal("Transaction Error","Some error has Occured !", "error");
     }
 
-});//.render('#paypal-button-container');
+}).render('#paypal-button-container');
