@@ -1,0 +1,2 @@
+C:\Users\shohilvm\Desktop\paypal_assessment_trial_5\obj\Debug\paypal_assessment_trial_5.njsprojAssemblyReference.cache
+C:\Users\shohilvm\Desktop\paypal_assessment_trial_5\bin\Microsoft.NodejsTools.WebRole.dll

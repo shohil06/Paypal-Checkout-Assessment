@@ -82,35 +82,39 @@ $('document').ready(function () {
             parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
 });
 
+var FUNDING_SOURCES = [
+    paypal.FUNDING.PAYPAL,
+    paypal.FUNDING.VENMO,
+    paypal.FUNDING.CREDIT,
+    paypal.FUNDING.CARD
+];
+
+FUNDING_SOURCES.forEach(function (fundingSource) {
+    var button = paypal.Buttons({
+        fundingSource: fundingSource
+    });
+    if (button.isEligible()) {
+        button.render('#paypal-button-container');
+    }
+});
 paypal.Buttons({
     createOrder: function (data, actions) {
-        var transactionAmount = parseFloat(parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
-            parseInt($("#retriever_Quantity").val()) * parseFloat($("#retrieverAmount")[0].innerText.split("$")[1]) +
-            parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
-        try {
-            if (parseFloat(transactionAmount) > 0.01) {
-                return fetch('/createOrder', {
-                    method: 'post',
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "intent": "CAPTURE",
-                        "amount": transactionAmount.toString()
-                    })
-                }).then(function (res) {
-                    return res.json();
-                }).then(function (data) {
-                    return data.orderID;
-                });
-            }
-            else {
-                return alert("Cart Amount cannot be 0");
-            }
-        }
-        catch (exception) {
-            console.error(exception);
-        }
+        return fetch('/createOrder', {
+            method: 'post',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                "intent": "CAPTURE",
+                "amount": parseFloat(parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
+                    parseInt($("#retriever_Quantity").val()) * parseFloat($("#retrieverAmount")[0].innerText.split("$")[1]) +
+                    parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2).toString()
+            })
+        }).then(function (res) {
+            return res.json();
+        }).then(function (data) {
+            return data.orderID;
+        });
     },
     onApprove: function (data, actions) {
         return fetch('/captureOrder', {
@@ -126,9 +130,6 @@ paypal.Buttons({
         }).then(function (data) {
             return alert('Transaction triggered by ' + data.payer.name.given_name + " with status : " + data.status.toString());
         });
-    },
-    onError: function (err) {
-        alert(JSON.stringify(err));
     }
 
-}).render('#paypal-button-container');
+});//.render('#paypal-button-container');

@@ -31,8 +31,14 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="app.ts" />
-    <None Include="routes\index.ts" />
-    <None Include="routes\user.ts" />
+    <None Include="checkoutassessment - FTP.pubxml" />
+    <None Include="checkoutassessment - ReadOnly - FTP.pubxml" />
+    <None Include="checkoutassessment - Web Deploy.pubxml" />
+    <Content Include=".gitattributes" />
+    <Content Include=".gitignore" />
+    <Content Include="checkoutassessment - FTP.pubxml.user" />
+    <Content Include="checkoutassessment - ReadOnly - FTP.pubxml.user" />
+    <Content Include="checkoutassessment - Web Deploy.pubxml.user" />
     <Content Include="checkoutassessment.PublishSettings" />
     <Content Include="paypalCredentials.json">
       <SubType>Code</SubType>
@@ -43,9 +49,6 @@
     <Content Include="package.json" />
     <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
-    <Content Include="views\index.pug" />
-    <Content Include="views\layout.pug" />
-    <Content Include="views\error.pug" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config" />
   </ItemGroup>
@@ -55,7 +58,17 @@
     <Folder Include="public\javascripts\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="routes\" />
-    <Folder Include="views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="routes\captureOrder.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="routes\createOrder.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="routes\paypalCheckout.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
