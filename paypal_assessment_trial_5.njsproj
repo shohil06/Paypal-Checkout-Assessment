@@ -45,6 +45,7 @@
     </Content>
     <Content Include="public\index.html" />
     <Content Include="public\javascripts\index.js" />
+    <Content Include="Sequence Diagram.png" />
     <Content Include="tsconfig.json" />
     <Content Include="package.json" />
     <Content Include="public\stylesheets\main.css" />
