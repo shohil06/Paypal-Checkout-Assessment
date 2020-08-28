@@ -129,4 +129,10 @@ paypal.Buttons({
         swal("Transaction Error","Some error has Occured !", "error");
     }
 
-}).render('#paypal-button-container');
+},
+// {
+// funding: {
+//     allowed: [ paypal.FUNDING.CREDIT ]
+//    }
+// }
+).render('#paypal-button-container');

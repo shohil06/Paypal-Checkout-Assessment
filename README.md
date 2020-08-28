@@ -6,7 +6,7 @@ Following are the steps to test the application -
 2. Update the quantity of each item accordingly.
 3. Verify the Total and pay using Paypal Smart Button.
 4. To Complete Payments please find below specified credentials.
-5. Select Master Card INR payment, and Enter CVV as 618.
+5. Select Master Card USD payment, and Enter CVV as 618.
 6. Enter 3DSecure password and complete the transaction.
 
 Credentials:

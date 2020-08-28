@@ -36,7 +36,7 @@ async function createOrderApi_From_SDK(transacAmount, responseClient) {
             intent: 'CAPTURE',
             purchase_units: [{
                 amount: {
-                    currency_code: 'INR',
+                    currency_code: 'USD',
                     value: transacAmount
                 }
             }]
@@ -97,7 +97,7 @@ async function createOrderApi_from_Orders_Create_API(transacAmount, response) {
         intent: 'CAPTURE',
         purchase_units:
             [{
-                amount: { currency_code: 'INR', value: transacAmount }
+                amount: { currency_code: 'USD', value: transacAmount }
             }],
         application_context: { return_url: '', cancel_url: '' }
     }));
