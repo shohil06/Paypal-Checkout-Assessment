@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 
 import createOrder from './routes/createOrder';
 import captureOrder from './routes/captureOrder';
+import createBillingAgreement from './routes/createBillingAgreementSetup';
+import approveBillingAgreement from './routes/approveBillingAgreement';
 import webhookHandler from './routes/webhookHandler';
 
 var app = express();
@@ -18,6 +20,8 @@ app.set('view engine', 'html');
 app.use(express.static(path.join(__dirname, '/public')));
 app.use('/createOrder', createOrder);
 app.use('/captureOrder', captureOrder);
+app.use('/createBillingAgreement', createBillingAgreement);
+app.use('/approveBillingAgreement', approveBillingAgreement);
 app.use('/webhook',webhookHandler);
 
 // catch 404 and forward to error handler

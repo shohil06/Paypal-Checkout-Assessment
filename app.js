@@ -6,6 +6,9 @@ const path = require("path");
 const bodyParser = require('body-parser');
 const createOrder_1 = require("./routes/createOrder");
 const captureOrder_1 = require("./routes/captureOrder");
+const createBillingAgreementSetup_1 = require("./routes/createBillingAgreementSetup");
+const approveBillingAgreement_1 = require("./routes/approveBillingAgreement");
+const webhookHandler_1 = require("./routes/webhookHandler");
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -16,6 +19,9 @@ app.set('view engine', 'html');
 app.use(express.static(path.join(__dirname, '/public')));
 app.use('/createOrder', createOrder_1.default);
 app.use('/captureOrder', captureOrder_1.default);
+app.use('/createBillingAgreement', createBillingAgreementSetup_1.default);
+app.use('/approveBillingAgreement', approveBillingAgreement_1.default);
+app.use('/webhook', webhookHandler_1.default);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
