@@ -1,7 +1,7 @@
 body {
     font: 10px "Lucida Grande", Helvetica, Arial, sans-serif;
     margin-top: -20px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 a {

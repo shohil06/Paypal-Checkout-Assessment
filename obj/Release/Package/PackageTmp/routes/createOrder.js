@@ -46,7 +46,7 @@ function createOrderApi_From_SDK(transacAmount, responseClient) {
                 intent: 'CAPTURE',
                 purchase_units: [{
                         amount: {
-                            currency_code: 'INR',
+                            currency_code: paypalCredentials.currency_code,
                             value: transacAmount
                         }
                     }]
@@ -102,7 +102,7 @@ function createOrderApi_from_Orders_Create_API(transacAmount, response) {
         req.write(JSON.stringify({
             intent: 'CAPTURE',
             purchase_units: [{
-                    amount: { currency_code: 'INR', value: transacAmount }
+                    amount: { currency_code: paypalCredentials.currency_code, value: transacAmount }
                 }],
             application_context: { return_url: '', cancel_url: '' }
         }));

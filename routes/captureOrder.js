@@ -56,7 +56,7 @@ function captureOrderApi_From_SDK(orderId, responseClient) {
         }
         catch (err) {
             console.error(err);
-            return responseClient.send(500);
+            return responseClient.sendStatus(500);
         }
     });
 }

@@ -34,12 +34,129 @@ async function createOrderApi_From_SDK(transacAmount, responseClient) {
         request.headers["prefer"] = "return=representation";
         request.requestBody({
             intent: 'CAPTURE',
-            purchase_units: [{
-                amount: {
-                    currency_code: 'USD',
-                    value: transacAmount
+            "purchase_units": [
+                {
+                    "reference_id": "camera_shop_seller_1_" + Date.now().toString(),
+                    "description": "Camera Shop",
+                    "amount": {
+                        "currency_code": paypalCredentials.currency_code,
+                        "value": transacAmount,
+                        "breakdown": {
+                            "item_total": {
+                                "currency_code": paypalCredentials.currency_code,
+                                "value": transacAmount
+                            }
+                        }
+                    },
+                    "payee": {
+                        "email_address": paypalCredentials.merchant_one_email
+                    },
+                    "items": [
+                        {
+                            "name": "T-Shirt",
+                            "description": "Green XL",
+                            "sku": "sku01",
+                            "unit_amount": {
+                                "currency_code": paypalCredentials.currency_code,
+                                "value": transacAmount
+                            },
+                            "quantity": "1",
+                            "category": "PHYSICAL_GOODS"
+                        }
+                    ],
+                    "shipping": {
+                        "address": {
+                            "address_line_1": paypalCredentials.shipping_address_line_1,
+                            "address_line_2": paypalCredentials.shipping_address_line_2,
+                            "admin_area_2": paypalCredentials.shipping_admin_area_2,
+                            "admin_area_1": paypalCredentials.shipping_admin_area_1,
+                            "postal_code": paypalCredentials.shipping_postal_code,
+                            "country_code": paypalCredentials.shipping_country_code
+                        }
+                    },
+                    "shipping_method": "United Postal Service",
+                    // "payment_instruction": {
+                    //     "platform_fees": [
+                    //         {
+                    //             "amount": {
+                    //                 "currency_code": paypalCredentials.currency_code,
+                    //                 "value": paypalCredentials.platform_fee
+                    //             },
+                    //             "payee": {
+                    //                 "email_address": paypalCredentials.partner_email
+                    //             }
+                    //         }
+                    //     ]
+                    // },
+                    "payment_group_id": 1,
+                    "custom_id": "custom_value_" + Date.now().toString(),
+                    "invoice_id": "invoice_number_" + Date.now().toString(),
+                    "soft_descriptor": "Payment Camera Shop"
+                },
+                {
+                    "reference_id": "camera_shop_seller_2_" + Date.now().toString(),
+                    "description": "Camera Shop",
+                    "amount": {
+                        "currency_code": paypalCredentials.currency_code,
+                        "value": transacAmount,
+                        "breakdown": {
+                            "item_total": {
+                                "currency_code": paypalCredentials.currency_code,
+                                "value": transacAmount
+                            }
+                        }
+                    },
+                    "payee": {
+                        "email_address": paypalCredentials.merchant_two_email
+                    },
+                    "items": [
+                        {
+                            "name": "T-Shirt",
+                            "description": "Green XL",
+                            "sku": "sku01",
+                            "unit_amount": {
+                                "currency_code": paypalCredentials.currency_code,
+                                "value": transacAmount
+                            },
+                            "quantity": "1",
+                            "category": "PHYSICAL_GOODS"
+                        }
+                    ],
+                    "shipping": {
+                        "address": {
+                            "address_line_1": paypalCredentials.shipping_address_line_1,
+                            "address_line_2": paypalCredentials.shipping_address_line_2,
+                            "admin_area_2": paypalCredentials.shipping_admin_area_2,
+                            "admin_area_1": paypalCredentials.shipping_admin_area_1,
+                            "postal_code": paypalCredentials.shipping_postal_code,
+                            "country_code": paypalCredentials.shipping_country_code
+                        }
+                    },
+                    "shipping_method": "United Postal Service",
+                    // "payment_instruction": {
+                    //     "platform_fees": [
+                    //         {
+                    //             "amount": {
+                    //                 "currency_code": paypalCredentials.currency_code,
+                    //                 "value": paypalCredentials.platform_fee
+                    //             },
+                    //             "payee": {
+                    //                 "email_address": paypalCredentials.partner_email
+                    //             }
+                    //         }
+                    //     ]
+                    // },
+                    "payment_group_id": 1,
+                    "custom_id": "custom_value_" + Date.now().toString(),
+                    "invoice_id": "invoice_number_" + Date.now().toString(),
+                    "soft_descriptor": "Payment Camera Shop"
                 }
-            }]
+            ],
+            "application_context": {
+                "return_url": "https://webhook.site/26b032c1-4fb1-4f69-90c3-bbe7c245f08f",
+                "cancel_url": "https://webhook.site/26b032c1-4fb1-4f69-90c3-bbe7c245f08f",
+                "user_action": "PAY_NOW"
+            }
         });
         let requestClient = await payPalClient.client();
         const response = await requestClient.execute(request);
@@ -95,12 +212,130 @@ async function createOrderApi_from_Orders_Create_API(transacAmount, response) {
 
     req.write(JSON.stringify({
         intent: 'CAPTURE',
-        purchase_units:
-            [{
-                amount: { currency_code: 'USD', value: transacAmount }
-            }],
-        application_context: { return_url: '', cancel_url: '' }
-    }));
+        "purchase_units": [
+            {
+                "reference_id": "camera_shop_seller_1_" + Date.now().toString(),
+                "description": "Camera Shop",
+                "amount": {
+                    "currency_code": paypalCredentials.currency_code,
+                    "value": transacAmount,
+                    "breakdown": {
+                        "item_total": {
+                            "currency_code": paypalCredentials.currency_code,
+                            "value": transacAmount
+                        }
+                    }
+                },
+                "payee": {
+                    "email_address": paypalCredentials.merchant_one_email
+                },
+                "items": [
+                    {
+                        "name": "T-Shirt",
+                        "description": "Green XL",
+                        "sku": "sku01",
+                        "unit_amount": {
+                            "currency_code": paypalCredentials.currency_code,
+                            "value": transacAmount
+                        },
+                        "quantity": "1",
+                        "category": "PHYSICAL_GOODS"
+                    }
+                ],
+                "shipping": {
+                    "address": {
+                        "address_line_1": paypalCredentials.shipping_address_line_1,
+                        "address_line_2": paypalCredentials.shipping_address_line_2,
+                        "admin_area_2": paypalCredentials.shipping_admin_area_2,
+                        "admin_area_1": paypalCredentials.shipping_admin_area_1,
+                        "postal_code": paypalCredentials.shipping_postal_code,
+                        "country_code": paypalCredentials.shipping_country_code
+                    }
+                },
+                "shipping_method": "United Postal Service",
+                "payment_instruction": {
+                    "platform_fees": [
+                        {
+                            "amount": {
+                                "currency_code": paypalCredentials.currency_code,
+                                "value": paypalCredentials.platform_fee
+                            },
+                            "payee": {
+                                "email_address": paypalCredentials.partner_email
+                            }
+                        }
+                    ]
+                },
+                "payment_group_id": 1,
+                "custom_id": "custom_value_" + Date.now().toString(),
+                "invoice_id": "invoice_number_" + Date.now().toString(),
+                "soft_descriptor": "Payment Camera Shop"
+            },
+            {
+                "reference_id": "camera_shop_seller_2_" + Date.now().toString(),
+                "description": "Camera Shop",
+                "amount": {
+                    "currency_code": paypalCredentials.currency_code,
+                    "value": transacAmount,
+                    "breakdown": {
+                        "item_total": {
+                            "currency_code": paypalCredentials.currency_code,
+                            "value": transacAmount
+                        }
+                    }
+                },
+                "payee": {
+                    "email_address": paypalCredentials.merchant_two_email
+                },
+                "items": [
+                    {
+                        "name": "T-Shirt",
+                        "description": "Green XL",
+                        "sku": "sku01",
+                        "unit_amount": {
+                            "currency_code": paypalCredentials.currency_code,
+                            "value": transacAmount
+                        },
+                        "quantity": "1",
+                        "category": "PHYSICAL_GOODS"
+                    }
+                ],
+                "shipping": {
+                    "address": {
+                        "address_line_1": paypalCredentials.shipping_address_line_1,
+                        "address_line_2": paypalCredentials.shipping_address_line_2,
+                        "admin_area_2": paypalCredentials.shipping_admin_area_2,
+                        "admin_area_1": paypalCredentials.shipping_admin_area_1,
+                        "postal_code": paypalCredentials.shipping_postal_code,
+                        "country_code": paypalCredentials.shipping_country_code
+                    }
+                },
+                "shipping_method": "United Postal Service",
+                "payment_instruction": {
+                    "platform_fees": [
+                        {
+                            "amount": {
+                                "currency_code": paypalCredentials.currency_code,
+                                "value": paypalCredentials.platform_fee
+                            },
+                            "payee": {
+                                "email_address": paypalCredentials.partner_email
+                            }
+                        }
+                    ]
+                },
+                "payment_group_id": 1,
+                "custom_id": "custom_value_" + Date.now().toString(),
+                "invoice_id": "invoice_number_" + Date.now().toString(),
+                "soft_descriptor": "Payment Camera Shop"
+            }
+        ],
+        "application_context": {
+            "return_url": "https://webhook.site/26b032c1-4fb1-4f69-90c3-bbe7c245f08f",
+            "cancel_url": "https://webhook.site/26b032c1-4fb1-4f69-90c3-bbe7c245f08f"
+        },
+        "user_action": "PAY_NOW"
+}));
     req.end();
 }
 

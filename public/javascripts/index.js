@@ -76,18 +76,37 @@ $('input').on('blur', function () {
 });
 
 $('document').ready(function () {
-    $("#totalAmount")[0].innerText = "$" +
-        (parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
-            parseInt($("#retriever_Quantity").val()) * parseFloat($("#retrieverAmount")[0].innerText.split("$")[1]) +
-            parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
-});
+//     $("#totalAmount")[0].innerText = "$" +
+//         (parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
+//             parseInt($("#retriever_Quantity").val()) * parseFloat($("#retrieverAmount")[0].innerText.split("$")[1]) +
+//             parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
+// });
 
 paypal.Buttons({
+    // enableStandardCardFields: true,
+    //     // Specify the style of the button
+    //     style: {
+    //         layout: 'vertical'
+    //     },
+     
+    //     funding: {
+    //         allowed: [
+    //             // Enable alternative payment methods
+    //             paypal.FUNDING.IDEAL, //Netherlands
+    //             paypal.FUNDING.EPS, //Austria
+    //             paypal.FUNDING.SOFORT, //Germany, Netherlands, Italy, Austria, Spain, Belgium
+    //             paypal.FUNDING.BANCONTACT, //Belgium
+    //             paypal.FUNDING.GIROPAY, //Germany
+    //             paypal.FUNDING.MYBANK //Italy
+    //         ],
+    //         disallowed: []
+    //     },
     createOrder: function (data, actions) {
         var transactionAmount = parseFloat(parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
             parseInt($("#retriever_Quantity").val()) * parseFloat($("#retrieverAmount")[0].innerText.split("$")[1]) +
             parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
-        return fetch('/createOrder', {
+            var transactionAmount = parseFloat($("#totalAmount")[0].innerText.split("$")[1]).toFixed(2);
+        return fetch('/chargeApi', {
             method: 'post',
             headers: {
                 'content-type': 'application/json'
@@ -95,16 +114,20 @@ paypal.Buttons({
             body: JSON.stringify({
                 "intent": "CAPTURE",
                 "amount": transactionAmount.toString()
+                // "amount": "2505.00"
             })
         }).then(function (res) {
             return res.json();
         }).then(function (data) {
             return data.orderID;
+            // return "36V123760G151373S";
         }).catch(function (error) {
                 swal(exception.message, "error");
                 console.error(exception);
             });
     },
+    // createOrder: function () {return "3VB219568T588274X";},
+    // onCreate:  function () {return "3VB219568T588274X";},
     onApprove: function (data, actions) {
         swal({ title: "Transaction In Progress", text: "Order Id : " + data.orderID, type: "info", button: false });
         return fetch('/captureOrder', {
@@ -113,7 +136,8 @@ paypal.Buttons({
                 'content-type': 'application/json'
             },
             body: JSON.stringify({
-                orderID: data.orderID
+                // orderID: data.orderID
+                orderID: "60U547846E993182R"
             })
         }).then(function (res) {
             swal.close();
@@ -136,3 +160,31 @@ paypal.Buttons({
 //    }
 // }
 ).render('#paypal-button-container');
+});
+// paypal.rememberFunding([ paypal.FUNDING.PAYLATER, paypal.FUNDING.ITAU ], {
+//     expiry: 2 * 30 * 24 * 60 * 60
+// });
+
+var FUNDING_SOURCES = [
+    paypal.FUNDING.PAYPAL,
+    paypal.FUNDING.VENMO,
+    paypal.FUNDING.CREDIT,
+    paypal.FUNDING.CARD,
+    paypal.FUNDING.PAYLATER
+];
+
+// Loop over each funding source / payment method
+// FUNDING_SOURCES.forEach(function(fundingSource) {
+
+//     // Initialize the buttons
+//     var button = paypal.Buttons({
+//         fundingSource: fundingSource
+//     });
+
+//     // Check if the button is eligible
+//     if (button.isEligible()) {
+
+//         // Render the standalone button for that funding source
+//         button.render('#paypal-button-container');
+//     }
+// });
