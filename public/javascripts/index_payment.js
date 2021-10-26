@@ -82,30 +82,8 @@ $('document').ready(function () {
 //             parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
 // });
 
-var FUNDING_SOURCES = [
-    paypal.FUNDING.PAYPAL,
-    paypal.FUNDING.VENMO,
-    paypal.FUNDING.PAYLATER,
-    paypal.FUNDING.CREDIT,
-    paypal.FUNDING.CARD
-];
 
-// Loop over each funding source/payment method
-FUNDING_SOURCES.forEach(function(fundingSource) {
-
-    // Initialize the buttons
-    var button = paypal.Buttons({
-        fundingSource: fundingSource
-    });
-
-    // Check if the button is eligible
-    if (button.isEligible()) {
-
-// paypal.Buttons({
-mark({
-        style: {
-            layout: 'vertical'
-        },
+paypal.Buttons({
     createOrder: function (data, actions) {
         var transactionAmount = parseFloat(parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
             parseInt($("#retriever_Quantity").val()) * parseFloat($("#retrieverAmount")[0].innerText.split("$")[1]) +
@@ -198,7 +176,7 @@ mark({
 
 },
 ).render('#paypal-button-container');
-    }});
+});
 
 
 
