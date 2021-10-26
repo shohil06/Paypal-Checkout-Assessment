@@ -127,7 +127,7 @@
 
             <div id="paypal-button-container"></div>
             <br/><br/><br/><br/>
-            <h2>MIB</h2>
+            <!-- <h2>MIB</h2> -->
 
         </div>
     </div>
@@ -136,8 +136,26 @@
     <!-- Multi Seller Payment -->
     <!-- <script src="https://www.paypal.com/sdk/js?client-id=AaNcdpJOAyi9JD5lQQUkaI0ldZYFXyWTgJzGchVn1nbTJAQtcNVt8QTMuWPoP4kVmZPuIFwzCBs7fnAQ&merchant-id=*&buyer-country=US&debug=true" data-merchant-id="MPKE367HEFE58,TCRVGAWTJHW38"></script> -->
 
-    <script src="https://www.paypal.com/sdk/js?client-id=ASvTUxelbYUct9e7zjz4KlXMdpaJBU682Xje1wfE57JXzipDI_vup6oiJ2om304lhodtsKg7pqzkJcqW&buyer-country=US&merchant-id=3K92SRNQX4KY6&vault=true&intent=tokenize"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="javascripts/index.js"></script>
+    
+    <!-- <script src="https://www.paypal.com/sdk/js?client-id=ASvTUxelbYUct9e7zjz4KlXMdpaJBU682Xje1wfE57JXzipDI_vup6oiJ2om304lhodtsKg7pqzkJcqW&buyer-country=US&merchant-id=3K92SRNQX4KY6&vault=true&intent=tokenize" data-client-metadata-id="1bcs123213"></script>
+    <script src="javascripts/index.js" custom_script_id="initial"></script> -->
+    
+    <script src="https://www.paypal.com/sdk/js?client-id=ASvTUxelbYUct9e7zjz4KlXMdpaJBU682Xje1wfE57JXzipDI_vup6oiJ2om304lhodtsKg7pqzkJcqW&buyer-country=US&merchant-id=3K92SRNQX4KY6&currency=USD&enable-funding=venmo&components=funding-eligibility,buttons,marks"></script>
+    <script src="javascripts/index_payment.js" custom_script_id="initial"></script>
+    
+    <!-- <script src="javascripts/index_1.js" custom_script_id="final"></script> -->
+
+    <!-- <script type="application/json" fncls="fnparams-dede7cc5-15fd-4c75-a9f4-36c430ee3a99">
+        {
+            "f":paypal.getCorrelationID(),
+            "s":""Fraudnet_Session_Identifier_" + Date.now().toString()",
+            "correlationId": paypal.getCorrelationID()
+        }
+    </script>
+    <script type="text/javascript" src="https://c.paypal.com/da/r/fb.js"></script>
+    <noscript>
+        <img src="https://c.paypal.com/v1/r/d/b/ns?f=change_this_to_32char_guid&s=flowid_provided_to_you&js=0&r=1" />
+    </noscript> -->
 </body>
 </html>

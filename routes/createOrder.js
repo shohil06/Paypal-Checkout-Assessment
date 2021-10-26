@@ -18,10 +18,18 @@ router.post("/", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const transactionAmount = req.body.amount;
+            let BAID_token = null;
+            try {
+                BAID_token = req.body.baid_token;
+            }
+            catch (e) {
+                console.log(e);
+            }
             // True to use SDK
             // False for using REST API
             var use_SDK = paypalCredentials.use_SDK;
-            use_SDK === true ? createOrderApi_From_SDK(transactionAmount, res) : createOrderApi_from_Orders_Create_API(transactionAmount, res);
+            use_SDK = false;
+            use_SDK === true ? createOrderApi_From_SDK(transactionAmount, res) : createOrderApi_from_Orders_Create_API(transactionAmount, res, BAID_token);
             //await createOrderApi_From_SDK(transactionAmount, res);
             //createOrderApi_from_Orders_Create_API(transactionAmount, res)
         }
@@ -132,7 +140,7 @@ function createOrderApi_From_SDK(transacAmount, responseClient) {
 *	@param response - response
 *	@return JSON
 */
-function createOrderApi_from_Orders_Create_API(transacAmount, response) {
+function createOrderApi_from_Orders_Create_API(transacAmount, response, BAID_token = null) {
     return __awaiter(this, void 0, void 0, function* () {
         var http = require("https");
         var options = {
@@ -142,7 +150,8 @@ function createOrderApi_from_Orders_Create_API(transacAmount, response) {
             "path": "/v2/checkout/orders",
             "headers": {
                 "Content-Type": "application/json",
-                "Authorization": "Basic " + Buffer.from(paypalCredentials.clientId + ":" + paypalCredentials.secret).toString('base64')
+                "Authorization": "Basic " + Buffer.from(paypalCredentials.clientId + ":" + paypalCredentials.secret).toString('base64'),
+                "PayPal-Request-Id": (new Date()).toString()
             }
         };
         var req = http.request(options, function (res) {
@@ -158,9 +167,7 @@ function createOrderApi_from_Orders_Create_API(transacAmount, response) {
                 response.json(responseJson);
             });
         });
-        req.write(JSON.stringify({
-            intent: 'CAPTURE',
-            "purchase_units": [
+        const check_if_BAID = Object.assign(Object.assign({ intent: 'CAPTURE', "purchase_units": [
                 {
                     "reference_id": "camera_shop_seller_1_" + Date.now().toString(),
                     "description": "Camera Shop",
@@ -219,27 +226,19 @@ function createOrderApi_from_Orders_Create_API(transacAmount, response) {
                     "invoice_id": "invoice_number_" + Date.now().toString(),
                     "soft_descriptor": "Payment Camera Shop"
                 }
-            ],
-            "payment_source": {
-                "paypal": {
-                    "attributes": {
-                        "customer": {
-                            "id": "Muru-vaultAPI001"
-                        },
-                        "vault": {
-                            "usage_type": "MERCHANT",
-                            "customer_type": "CONSUMER",
-                            "confirm_payment_token": "ON_ORDER_COMPLETION"
-                        }
+            ] }, (BAID_token != null ?
+            {
+                "payment_source": {
+                    "token": {
+                        "id": BAID_token,
+                        "type": "BILLING_AGREEMENT"
                     }
                 }
-            },
-            "application_context": {
+            } : null)), { "application_context": {
                 "return_url": paypalCredentials.return_url,
                 "cancel_url": paypalCredentials.return_url
-            },
-            "user_action": "PAY_NOW"
-        }));
+            }, "user_action": "PAY_NOW" });
+        req.write(JSON.stringify(check_if_BAID));
         req.end();
     });
 }

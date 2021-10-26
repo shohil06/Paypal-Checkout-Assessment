@@ -75,8 +75,6 @@ $('input').on('blur', function () {
     }
 });
 
-let BAID_Token = null;
-
 $('document').ready(function () {
 //     $("#totalAmount")[0].innerText = "$" +
 //         (parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
@@ -84,39 +82,36 @@ $('document').ready(function () {
 //             parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
 // });
 
-paypal.Buttons({
+var FUNDING_SOURCES = [
+    paypal.FUNDING.PAYPAL,
+    paypal.FUNDING.VENMO,
+    paypal.FUNDING.PAYLATER,
+    paypal.FUNDING.CREDIT,
+    paypal.FUNDING.CARD
+];
+
+// Loop over each funding source/payment method
+FUNDING_SOURCES.forEach(function(fundingSource) {
+
+    // Initialize the buttons
+    var button = paypal.Buttons({
+        fundingSource: fundingSource
+    });
+
+    // Check if the button is eligible
+    if (button.isEligible()) {
+
+// paypal.Buttons({
+mark({
         style: {
             layout: 'vertical'
         },
-    // createOrder: function (data, actions) {
-    //     var transactionAmount = parseFloat(parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
-    //         parseInt($("#retriever_Quantity").val()) * parseFloat($("#retrieverAmount")[0].innerText.split("$")[1]) +
-    //         parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
-    //         var transactionAmount = parseFloat($("#totalAmount")[0].innerText.split("$")[1]).toFixed(2);
-    //     return fetch('/createOrder', {
-    //         method: 'post',
-    //         headers: {
-    //             'content-type': 'application/json'
-    //         },
-    //         body: JSON.stringify({
-    //             "intent": "CAPTURE",
-    //             "amount": transactionAmount.toString()
-    //         })
-    //     }).then(function (res) {
-    //         return res.json();
-    //     }).then(function (data) {
-    //         return data.orderID;
-    //     }).catch(function (error) {
-    //             swal(exception.message, "error");
-    //             console.error(exception);
-    //         });
-    // },
-    createBillingAgreement: function ( data, actions) {
-            var transactionAmount = parseFloat(parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
+    createOrder: function (data, actions) {
+        var transactionAmount = parseFloat(parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
             parseInt($("#retriever_Quantity").val()) * parseFloat($("#retrieverAmount")[0].innerText.split("$")[1]) +
             parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
             var transactionAmount = parseFloat($("#totalAmount")[0].innerText.split("$")[1]).toFixed(2);
-        return fetch('/createBillingAgreement', {
+        return fetch('/createOrder', {
             method: 'post',
             headers: {
                 'content-type': 'application/json'
@@ -128,86 +123,82 @@ paypal.Buttons({
         }).then(function (res) {
             return res.json();
         }).then(function (data) {
-            console.log(paypal.getCorrelationID())
             return data.orderID;
         }).catch(function (error) {
                 swal(exception.message, "error");
                 console.error(exception);
             });
     },
-    onApprove: function (data, actions) {
-        var transactionAmount = parseFloat(parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
-            parseInt($("#retriever_Quantity").val()) * parseFloat($("#retrieverAmount")[0].innerText.split("$")[1]) +
-            parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
-            var transactionAmount = parseFloat($("#totalAmount")[0].innerText.split("$")[1]).toFixed(2);
-        swal({ title: "Approval of Agreement in Progress", text: "Agreement Id : " + data.orderID, type: "info", button: false });
-        console.log(paypal.getCorrelationID())
-        return fetch('/approveBillingAgreement', {
-            method: 'post',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                agreementID: data.billingToken
-            })
-        }).then(function (res) {
-            swal.close();
-            console.log(paypal.getCorrelationID())
-            return res.json();
-        }).then(function (data) {
-            BAID_Token = data.id;
-            swal("Billing Agreement Successfully Setup", "Order Id : " + data.id, "success");
-        }).then(function (data){
-            swal({ title: "We are processing your purchase...", text: " Please wait ", type: "info", button: false });
-            fetch('/createOrder', { // charge 
-                method: 'post',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "intent": "CAPTURE",
-                    "amount": transactionAmount.toString(),
-                    "baid_token": BAID_Token.toString()
-                })
-            }).then(function (res) {
-                return res.json();
-            }).then(function (data) {
-                swal("Transaction Successfull", "PayPal Transaction Id : " + data.purchase_units[0].payments.captures[0].id,"success");
-                // return swal("Transaction Successfull", "Order Id : " + data.id, "success", true);
-                // return data.orderID;
-            }).catch(function (error) {
-                    swal(error.message, "error");
-                    console.error(exception);
-                });
-        })
-    },
-    // onApprove: function (data, actions) {
-    //     swal({ title: "Transaction In Progress", text: "Order Id : " + data.orderID, type: "info", button: false });
-    //     return fetch('/captureOrder', {
+    // createBillingAgreement: function ( data, actions) {
+    //         var transactionAmount = parseFloat(parseInt($("#labrador_Quantity").val()) * parseFloat($("#labradorAmount")[0].innerText.split("$")[1]) +
+    //         parseInt($("#retriever_Quantity").val()) * parseFloat($("#retrieverAmount")[0].innerText.split("$")[1]) +
+    //         parseInt($("#rottweiler_Quantity").val()) * parseFloat($("#rottweilerAmount")[0].innerText.split("$")[1])).toFixed(2);
+    //         var transactionAmount = parseFloat($("#totalAmount")[0].innerText.split("$")[1]).toFixed(2);
+    //     return fetch('/createBillingAgreement', {
     //         method: 'post',
     //         headers: {
     //             'content-type': 'application/json'
     //         },
     //         body: JSON.stringify({
-    //             orderID: data.orderID
+    //             "intent": "CAPTURE",
+    //             "amount": transactionAmount.toString()
+    //         })
+    //     }).then(function (res) {
+    //         return res.json();
+    //     }).then(function (data) {
+    //         console.log(paypal.getCorrelationID())
+    //         return data.orderID;
+    //     }).catch(function (error) {
+    //             swal(exception.message, "error");
+    //             console.error(exception);
+    //         });
+    // },
+    // onApprove: function (data, actions) {
+    //     swal({ title: "Approval of Agreement in Progress", text: "Agreement Id : " + data.orderID, type: "info", button: false });
+    //     console.log(paypal.getCorrelationID())
+    //     return fetch('/approveBillingAgreement', {
+    //         method: 'post',
+    //         headers: {
+    //             'content-type': 'application/json'
+    //         },
+    //         body: JSON.stringify({
+    //             agreementID: data.billingToken
     //         })
     //     }).then(function (res) {
     //         swal.close();
+    //         console.log(paypal.getCorrelationID())
     //         return res.json();
     //     }).then(function (data) {
-    //         swal("Transaction Successfull", "Order Id : " + data.id, "success");
+    //         swal("Billing Agreement Successfully Setup", "Order Id : " + data.id, "success");
     //     });
     // },
+    onApprove: function (data, actions) {
+        swal({ title: "Transaction In Progress", text: "Order Id : " + data.orderID, type: "info", button: false });
+        return fetch('/captureOrder', {
+            method: 'post',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                orderID: data.orderID
+            })
+        }).then(function (res) {
+            swal.close();
+            return res.json();
+        }).then(function (data) {
+            swal("Transaction Successfull", "Order Id : " + data.id, "success");
+        });
+    },
     onCancel: function (data) {
         swal("Transaction Cancelled",'Order Id : ' + data.orderID, "info");
     },
     onError: function (err) {
         swal("Transaction Error","Some error has Occured !", "error");
-        console.log(err);
     }
 
 },
 ).render('#paypal-button-container');
+    }});
 
 
 
