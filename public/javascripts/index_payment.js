@@ -177,19 +177,3 @@ paypal.Buttons({
 },
 ).render('#paypal-button-container');
 });
-
-
-
-
-
-
-
-// var script = document.createElement('script');
-// script.setAttribute("type", "application/json");
-// script.setAttribute("fncls", "fnparams-dede7cc5-15fd-4c75-a9f4-36c430ee3a99");
-// script.src = "https://c.paypal.com/da/r/fb.js";
-// document.body.appendChild(script);
-// f = "any_unique_id"; // In STC tracking_id and PayPal-Metadata-client-id header in POST Create Order API
-// s = "Fraudnet_Session_Identifier_" + "any_client_id";
-
-});
