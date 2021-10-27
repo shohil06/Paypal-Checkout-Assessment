@@ -75,6 +75,7 @@ function captureOrderApi_From_Orders_Capture_Api(orderId, response) {
             "path": "/v2/checkout/orders/" + orderId.toString() + "/capture",
             "headers": {
                 "content-type": "application/json",
+                "Prefer": "representation",
                 "Authorization": "Basic " + Buffer.from(paypalCredentials.clientId + ":" + paypalCredentials.secret).toString('base64')
             }
         };

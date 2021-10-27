@@ -28,7 +28,6 @@ router.post("/", function (req, res) {
             // True to use SDK
             // False for using REST API
             var use_SDK = paypalCredentials.use_SDK;
-            use_SDK = false;
             use_SDK === true ? createOrderApi_From_SDK(transactionAmount, res) : createOrderApi_from_Orders_Create_API(transactionAmount, res, BAID_token);
             //await createOrderApi_From_SDK(transactionAmount, res);
             //createOrderApi_from_Orders_Create_API(transactionAmount, res)
@@ -88,11 +87,10 @@ function createOrderApi_From_SDK(transacAmount, responseClient) {
                                 "address_line_2": paypalCredentials.shipping_address_line_2,
                                 "admin_area_2": paypalCredentials.shipping_admin_area_2,
                                 "admin_area_1": paypalCredentials.shipping_admin_area_1,
-                                "postal_code": paypalCredentials.shipping_postal_code,
-                                "country_code": paypalCredentials.shipping_country_code
+                                "postal_code": "10623",
+                                "country_code": "DE"
                             }
                         },
-                        "shipping_method": "United Postal Service",
                         // "payment_instruction": {
                         //     "platform_fees": [
                         //         {
@@ -106,7 +104,6 @@ function createOrderApi_From_SDK(transacAmount, responseClient) {
                         //         }
                         //     ]
                         // },
-                        "payment_group_id": 1,
                         "custom_id": "custom_value_" + Date.now().toString(),
                         "invoice_id": "invoice_number_" + Date.now().toString(),
                         "soft_descriptor": "Payment Camera Shop"
@@ -118,6 +115,18 @@ function createOrderApi_From_SDK(transacAmount, responseClient) {
                     "user_action": "PAY_NOW"
                 }
             });
+            // request.requestBody({
+            //     intent: 'CAPTURE',
+            //     purchase_units: [{
+            //         amount: {
+            //             "value": '88.44',
+            //             "currency_code": paypalCredentials.currency_code,
+            //         },
+            //         "payee": {
+            //             "email_address": paypalCredentials.merchant_one_email
+            //         },
+            //     }]
+            // })
             let requestClient = yield payPalClient.client();
             const response = yield requestClient.execute(request);
             response.result.links.forEach((item, index) => {
@@ -236,7 +245,8 @@ function createOrderApi_from_Orders_Create_API(transacAmount, response, BAID_tok
                 }
             } : null)), { "application_context": {
                 "return_url": paypalCredentials.return_url,
-                "cancel_url": paypalCredentials.return_url
+                "cancel_url": paypalCredentials.return_url,
+                "landing_page": "login"
             }, "user_action": "PAY_NOW" });
         req.write(JSON.stringify(check_if_BAID));
         req.end();
